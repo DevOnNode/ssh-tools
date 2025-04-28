@@ -5,12 +5,6 @@
 
 A small modular set of scripts for managing SSH keys.
 
-## Scripts
-
-- `main.sh` — launcher with menu.
-- `scripts/show_keys.sh` — finds and displays SSH keys.
-- `scripts/generate_key.sh` — generates a new SSH key.
-
 ## How to Use
 
 1. Make all scripts executable:
