@@ -5,7 +5,25 @@ generate_key() {
     echo -e "${YELLOW}📧 Enter your email:${RESET}"
     read user_email
 
-    key_path="$HOME/.ssh/id_ed25519"
+    echo
+    echo -e "${YELLOW}🔑 Choose key type (ed25519/rsa):${RESET}"
+    read key_type
+
+    case "$key_type" in
+        ed25519|ED25519|"")
+            key_type="ed25519"
+            ;;
+        rsa|RSA)
+            key_type="rsa"
+            ;;
+        *)
+            echo -e "${RED}❗ Invalid key type selected.${RESET}"
+            printf '\a'
+            return
+            ;;
+    esac
+
+    key_path="$HOME/.ssh/id_${key_type}"
 
     if [[ -f "$key_path" || -f "${key_path}.pub" ]]; then
         echo -e "${RED}❗ SSH key already exists at ${key_path}.${RESET}"
@@ -24,12 +42,13 @@ generate_key() {
     done
     echo
 
-    ssh-keygen -t ed25519 -C "$user_email" -f "$key_path" -N "" -q
-
-    if ! pgrep -u "$USER" ssh-agent > /dev/null; then
-        echo -e "${RED}❗ ssh-agent is not running. Starting it...${RESET}"
-        eval "$(ssh-agent -s)"
+    if [[ "$key_type" == "rsa" ]]; then
+        ssh-keygen -t rsa -b 4096 -C "$user_email" -f "$key_path" -N ""
+    else
+        ssh-keygen -t ed25519 -C "$user_email" -f "$key_path" -N ""
     fi
+
+    eval "$(ssh-agent -s)"
 
     echo -e "${CYAN}➕ Adding SSH key to the agent...${RESET}"
     ssh-add "$key_path"

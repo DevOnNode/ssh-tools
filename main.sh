@@ -6,16 +6,20 @@ source scripts/show_keys.sh
 source scripts/generate_key.sh
 source scripts/delete_key.sh
 source scripts/remove_from_agent.sh
+source scripts/list_agent_keys.sh
+
 
 show_menu() {
     echo -e "${CYAN}"
     echo "=== SSH Key Manager ==="
     echo -e "${RESET}"
     echo "1) Show SSH keys"
-    echo "2) Generate SSH key"
-    echo "3) Delete SSH key"
-    echo "4) Remove key from ssh-agent"
-    echo "5) Exit"
+    echo "2) List keys loaded in ssh-agent"
+    echo "3) Generate SSH key"
+    echo "4) Delete SSH key"
+    echo "5) Remove key from ssh-agent"
+    echo "6) Exit"
+    echo -e "${CYAN}"
 }
 
 while true; do
@@ -31,20 +35,20 @@ while true; do
             show_keys
             ;;
         2)
-            generate_key
+            list_agent_keys
             ;;
         3)
-            delete_key
+            generate_key
             ;;
         4)
-            remove_from_agent
+            delete_key
             ;;
         5)
+            remove_from_agent
+            ;;
+        6)
             echo -e "${GREEN}Goodbye!${RESET}"
             exit 0
-            ;;
-        *)
-            echo -e "${RED}Invalid option. Try again.${RESET}"
             ;;
     esac
 
