@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source utils/progress_bar.sh
+
 generate_key() {
     echo
     echo -e "${YELLOW}📧 Enter your email:${RESET}"
@@ -34,13 +36,7 @@ generate_key() {
     echo
     echo -e "${CYAN}🔑 Generating SSH key...${RESET}"
 
-    bar="■□□□□□□□□□"
-    for i in {1..10}; do
-        printf "\r${BLUE}[%-10s] %d%%${RESET}" "$bar" "$((i * 10))"
-        bar=${bar/□/■}
-        sleep 0.2
-    done
-    echo
+    show_progress_bar
 
     if [[ "$key_type" == "rsa" ]]; then
         ssh-keygen -t rsa -b 4096 -C "$user_email" -f "$key_path" -N ""
