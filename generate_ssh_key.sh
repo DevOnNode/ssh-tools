@@ -1,6 +1,5 @@
 #!/bin/bash
  
- echo "Enter your email:"
  RED="\e[31m"
  GREEN="\e[32m"
  BLUE="\e[34m"
@@ -18,6 +17,19 @@
  
  echo
  echo -e "${CYAN}🔑 Generating SSH key...${RESET}"
+ 
+ progress_bar() {
+     bar="■□□□□□□□□□"
+     for i in {1..10}; do
+         printf "\r${BLUE}[%-10s] %d%%${RESET}" "$bar" "$((i * 10))"
+         bar=${bar/□/■}
+         sleep 0.2
+     done
+     echo
+ }
+ 
+ progress_bar
+ 
  ssh-keygen -t ed25519 -C "$user_email" -f "$key_path" -N ""
  
  eval "$(ssh-agent -s)"
@@ -26,10 +38,6 @@
  ssh-add "$key_path"
  
  echo
- echo "✅ New SSH key successfully created."
- echo "Key locations:"
- echo " - Private key: $key_path"
- echo " - Public key: ${key_path}.pub"
  echo -e "${GREEN}✅ New SSH key successfully created.${RESET}"
  echo -e "${BOLD}Key locations:${RESET}"
  echo -e " - 🔐 Private key: ${BLUE}${key_path}${RESET}"
